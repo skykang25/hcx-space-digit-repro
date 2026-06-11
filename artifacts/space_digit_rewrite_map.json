@@ -1,0 +1,89 @@
+{
+  "description": "Decode-equivalent rewrite map used to split leading-space digit single tokens into a space token plus a digit token. The visible decoded text is unchanged.",
+  "space_token": {
+    "text": " ",
+    "token_id": 220
+  },
+  "digits": {
+    "0": {
+      "leading_space_digit_text": " 0",
+      "original_token_id": 109658,
+      "rewritten_token_ids": [
+        220,
+        15
+      ]
+    },
+    "1": {
+      "leading_space_digit_text": " 1",
+      "original_token_id": 103647,
+      "rewritten_token_ids": [
+        220,
+        16
+      ]
+    },
+    "2": {
+      "leading_space_digit_text": " 2",
+      "original_token_id": 109896,
+      "rewritten_token_ids": [
+        220,
+        17
+      ]
+    },
+    "3": {
+      "leading_space_digit_text": " 3",
+      "original_token_id": 103590,
+      "rewritten_token_ids": [
+        220,
+        18
+      ]
+    },
+    "4": {
+      "leading_space_digit_text": " 4",
+      "original_token_id": 101709,
+      "rewritten_token_ids": [
+        220,
+        19
+      ]
+    },
+    "5": {
+      "leading_space_digit_text": " 5",
+      "original_token_id": 110217,
+      "rewritten_token_ids": [
+        220,
+        20
+      ]
+    },
+    "6": {
+      "leading_space_digit_text": " 6",
+      "original_token_id": 105778,
+      "rewritten_token_ids": [
+        220,
+        21
+      ]
+    },
+    "7": {
+      "leading_space_digit_text": " 7",
+      "original_token_id": 103650,
+      "rewritten_token_ids": [
+        220,
+        22
+      ]
+    },
+    "8": {
+      "leading_space_digit_text": " 8",
+      "original_token_id": 101994,
+      "rewritten_token_ids": [
+        220,
+        23
+      ]
+    },
+    "9": {
+      "leading_space_digit_text": " 9",
+      "original_token_id": 102409,
+      "rewritten_token_ids": [
+        220,
+        24
+      ]
+    }
+  }
+}

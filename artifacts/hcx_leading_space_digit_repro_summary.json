@@ -1,0 +1,92 @@
+{
+  "title": "Reproducible leading-space digit token sensitivity in GSM8K-style prompts",
+  "model": "naver-hyperclovax/HyperCLOVAX-SEED-Think-14B",
+  "task_context": "TinyGSM8K / GSM8K-style arithmetic prompts",
+  "summary": {
+    "observation": "Quantities encoded as leading-space digit single tokens, such as \" 2\", were sometimes not used stably during generation.",
+    "important_distinction": "The visible prompt text was not rewritten. The mitigation changed only prompt_token_ids from a leading-space digit single token to a decode-equivalent space token plus digit token sequence.",
+    "non_claims": [
+      "This is not evidence that the tokenizer decodes \" 2\" incorrectly.",
+      "This is not a text rewrite such as \"2\" -> \"two\".",
+      "This does not by itself prove that vLLM is the root cause."
+    ]
+  },
+  "minimal_example": {
+    "question": "Rory orders 2 subs for $7.50 each, 2 bags of chips for $1.50 each and 2 cookies for $1.00 each for delivery. There is a 20% delivery fee added at check out and she wants to add a $5.00 tip. What will her delivery order cost?",
+    "expected_answer": "29",
+    "leading_space_digit_token": {
+      "text": " 2",
+      "token_id": 109896,
+      "occurrences_in_question": 3
+    }
+  },
+  "checks_performed": {
+    "hf_tokenizer_encode_decode": {
+      "preserved_visible_question_text": true,
+      "preserved_2_subs": true,
+      "preserved_2_bags": true,
+      "preserved_2_cookies": true
+    },
+    "lm_eval_payload": {
+      "messages_0_content_preserved_question": true,
+      "messages_0_content_contained_2_subs": true,
+      "messages_0_content_contained_2_bags": true,
+      "messages_0_content_contained_2_cookies": true
+    },
+    "vllm_prompt_probe": {
+      "server_prompt_text_matched_hf_apply_chat_template": true,
+      "server_prompt_token_ids_matched_hf_tokenizer_encode": true
+    },
+    "hf_vs_vllm_generation_probe": {
+      "hf_transformers_reproduced_failure_pattern": true,
+      "vllm_offline_with_hf_prompt_token_ids_reproduced_same_generated_token_ids": true
+    }
+  },
+  "observed_generation_symptoms": [
+    {
+      "case": "TinyGSM8K doc0, not-reasoning",
+      "symptom": "The model treated the quantities as if they were missing or placeholder-like, then assumed alternative quantities and produced an incorrect answer.",
+      "raw_excerpt": "Assuming \"eofag\" refers to quantities like 2 subs, 3 bags of chips, and 4 cookies ... Final Total Cost ... \\boxed{33.20}",
+      "finish_reason": "length"
+    },
+    {
+      "case": "Presentation screenshot example 1",
+      "symptom": "The model reconstructed the original quantity 2 as the placeholder-like string \"dog\".",
+      "raw_excerpt": "the problem mentions \"dog subs\", \"dog bags of chips\", and \"dog cookies\" ... \"dog\" here must be a variable representing a quantity"
+    },
+    {
+      "case": "Presentation screenshot example 2",
+      "symptom": "The model reconstructed digit positions as special-token-like or placeholder-like strings.",
+      "raw_excerpt": "to make<|stop|> liters of juice ... Sam needs<|stop|> kilograms of oranges ... needs.webdriver kilograms"
+    }
+  ],
+  "mitigation_tested": {
+    "method": "Decode-equivalent prompt token ID rewrite for leading-space digit tokens.",
+    "example": {
+      "original": {
+        "text": " 2",
+        "prompt_token_ids": [
+          109896
+        ]
+      },
+      "rewritten": {
+        "text": " 2",
+        "prompt_token_ids": [
+          220,
+          17
+        ]
+      },
+      "decode_equivalent": true
+    },
+    "observed_effect": "The mitigation improved answer stability in GSM8K-style prompts while preserving the visible prompt text."
+  },
+  "discussion_question": "Is this behavior expected or already known for this model/tokenizer combination? If there is an official recommended evaluation setup for GSM8K-style arithmetic prompts, especially regarding prompt tokenization, stop strings, and answer extraction, guidance would be appreciated.",
+  "local_source_files_used_to_prepare_this_summary": [
+    "tokenizer_encode_decode_doc0.json",
+    "payload_doc0_not_reasoning.json",
+    "response_doc0_not_reasoning.json",
+    "response_doc0_reasoning.json",
+    "summary_doc0.json",
+    "vllm_causallms.py"
+  ]
+}
