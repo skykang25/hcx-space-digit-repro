@@ -24,6 +24,10 @@ to make<|stop|> liters
 needs.webdriver kilograms
 ```
 
+## Observed Symptoms
+
+![Observed placeholder-like generation symptoms](artifacts/symptom_screenshot.png)
+
 The issue was mitigated by changing only the prompt token IDs for leading-space digit tokens.
 
 Example:
@@ -108,9 +112,19 @@ python3 src/rewrite_space_digit_tokens.py \
   --tokenizer naver-hyperclovax/HyperCLOVAX-SEED-Think-14B
 ```
 
+The `--ids` path uses only Python standard library modules. The `--text` and `--check-map` paths require `transformers`:
+
+```bash
+pip install -r requirements.txt
+```
+
+## Related Links
+
+- Hugging Face Discussion: https://huggingface.co/naver-hyperclovax/HyperCLOVAX-SEED-Think-14B/discussions/14
+- Model card: https://huggingface.co/naver-hyperclovax/HyperCLOVAX-SEED-Think-14B
+
 ## Scope
 
 This repository is an unofficial reproduction note. It does not modify model weights, tokenizer files, or official benchmark numbers.
 
 The goal is to document a reproducible evaluation caveat: arithmetic benchmark results may be sensitive not only to visible prompt text, but also to the exact prompt token IDs used for leading-space digit quantities.
-
